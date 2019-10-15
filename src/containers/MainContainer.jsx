@@ -6,7 +6,6 @@ const MainContainer = () => {
   const proxy = 'https://cors-anywhere.herokuapp.com/';
   const url = 'https://fullstack-challenge-api.herokuapp.com/devices';
 
-  const arr = [];
   useEffect(() => {
     fetch(proxy + url, {
       method: 'GET',
@@ -15,28 +14,26 @@ const MainContainer = () => {
     })
       .then(res => res.json())
       .then(response => {
-        for (let el of response) {
-            console.log(el['name'])
-        //   arr.push(
-        //     <div>
-        //       <Device text={el['name']} id={`device-${el['name']}`} />)
-        //     </div>
-        //   );
-        }
+        const arr = [];
+        response.forEach(el => {
+          //   arr.push(<Device text={el.name} id={`device-${el.name}`} />);
+          arr.push(el.name);
+          //   console.log(el.name);
+          //   arr.push(
+          //     <div>
+          //       <Device text={el['name']} id={`device-${el['name']}`} />)
+          //     </div>
+          //   );
+        });
+        setDevices(arr);
       })
       .catch(() => {
         throw new Error('error in fetch request');
       });
   }, []);
 
-  //   console.log(arr, 'this is arr');
-  //   arr.map(device => console.log(device, 'these are devices'))
-  return (
-    <div>
-      <h1>Hello World</h1>
-      {arr}
-    </div>
-  );
+  const deviceRender = devices.map((el, idx) => <Device text={el} key={`device-${el}-${idx}`} />);
+  return <div>{deviceRender}</div>;
 };
 
 export default MainContainer;

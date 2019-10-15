@@ -31999,7 +31999,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Device = function Device(props) {
   var text = props.text;
-  return _react.default.createElement("h1", null, text);
+  return _react.default.createElement("div", null, text);
 };
 
 var _default = Device;
@@ -32038,7 +32038,6 @@ var MainContainer = function MainContainer() {
 
   var proxy = 'https://cors-anywhere.herokuapp.com/';
   var url = 'https://fullstack-challenge-api.herokuapp.com/devices';
-  var arr = [];
   (0, _react.useEffect)(function () {
     fetch(proxy + url, {
       method: 'GET',
@@ -32049,40 +32048,28 @@ var MainContainer = function MainContainer() {
     }).then(function (res) {
       return res.json();
     }).then(function (response) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = response[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var el = _step.value;
-          console.log(el['name']); //   arr.push(
-          //     <div>
-          //       <Device text={el['name']} id={`device-${el['name']}`} />)
-          //     </div>
-          //   );
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
+      var arr = [];
+      response.forEach(function (el) {
+        //   arr.push(<Device text={el.name} id={`device-${el.name}`} />);
+        arr.push(el.name); //   console.log(el.name);
+        //   arr.push(
+        //     <div>
+        //       <Device text={el['name']} id={`device-${el['name']}`} />)
+        //     </div>
+        //   );
+      });
+      setDevices(arr);
     }).catch(function () {
       throw new Error('error in fetch request');
     });
-  }, []); //   console.log(arr, 'this is arr');
-  //   arr.map(device => console.log(device, 'these are devices'))
-
-  return _react.default.createElement("div", null, _react.default.createElement("h1", null, "Hello World"), arr);
+  }, []);
+  var deviceRender = devices.map(function (el, idx) {
+    return _react.default.createElement(_Device.default, {
+      text: el,
+      key: "device-".concat(el, "-").concat(idx)
+    });
+  });
+  return _react.default.createElement("div", null, deviceRender);
 };
 
 var _default = MainContainer;
@@ -32150,7 +32137,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49699" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50129" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

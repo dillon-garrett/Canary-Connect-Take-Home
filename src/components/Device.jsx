@@ -2,7 +2,8 @@ import React from 'react';
 
 const Device = props => {
   const { text } = props;
-  return <h1>{text}</h1>;
+
+  return <div>{text}</div>;
 };
 
 export default Device;
