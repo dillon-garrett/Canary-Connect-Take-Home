@@ -31998,8 +31998,45 @@ var _react = _interopRequireDefault(require("react"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Device = function Device(props) {
-  var text = props.text;
-  return _react.default.createElement("div", null, text);
+  var text = props.text,
+      id = props.id,
+      proxy = props.proxy;
+  var url = "https://fullstack-challenge-api.herokuapp.com/devices/".concat(id, "/readings");
+  var readingsObj = {
+    humidity: [],
+    temperature: [],
+    airquality: []
+  };
+
+  var handleClick = function handleClick() {
+    fetch(proxy + url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json' //   mode: 'no-cors'
+
+      }
+    }).then(function (res) {
+      return res.json();
+    }).then(function (response) {
+      response.forEach(function (el) {
+        if (el.type === 'humidity') readingsObj.humidity.push(el.value);
+        if (el.type === 'temperature') readingsObj.temperature.push(el.value);
+        if (el.type === 'airquality') readingsObj.airquality.push(el.value);
+      });
+      console.log(readingsObj, 'this is readingsObj');
+    }).catch(function () {
+      throw new Error('error in fetching device readings');
+    });
+  };
+
+  return _react.default.createElement("section", {
+    className: "device",
+    id: id
+  }, text, _react.default.createElement("button", {
+    type: "button",
+    className: "get-graph-data",
+    onClick: handleClick
+  }, "Click Me"));
 };
 
 var _default = Device;
@@ -32031,7 +32068,7 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var MainContainer = function MainContainer() {
-  var _useState = (0, _react.useState)([]),
+  var _useState = (0, _react.useState)({}),
       _useState2 = _slicedToArray(_useState, 2),
       devices = _useState2[0],
       setDevices = _useState2[1];
@@ -32048,28 +32085,30 @@ var MainContainer = function MainContainer() {
     }).then(function (res) {
       return res.json();
     }).then(function (response) {
-      var arr = [];
+      var deviceObj = {};
       response.forEach(function (el) {
-        //   arr.push(<Device text={el.name} id={`device-${el.name}`} />);
-        arr.push(el.name); //   console.log(el.name);
-        //   arr.push(
-        //     <div>
-        //       <Device text={el['name']} id={`device-${el['name']}`} />)
-        //     </div>
-        //   );
+        deviceObj[el.name] = el.id;
       });
-      setDevices(arr);
+      setDevices(deviceObj);
     }).catch(function () {
       throw new Error('error in fetch request');
     });
   }, []);
-  var deviceRender = devices.map(function (el, idx) {
-    return _react.default.createElement(_Device.default, {
-      text: el,
-      key: "device-".concat(el, "-").concat(idx)
-    });
-  });
-  return _react.default.createElement("div", null, deviceRender);
+  var deviceRender = [];
+
+  for (var x in devices) {
+    deviceRender.push(_react.default.createElement(_Device.default, {
+      text: x,
+      id: devices[x],
+      key: devices[x],
+      proxy: proxy
+    }));
+  } //   const deviceRender = devices.map((el, idx) => <Device text={el} key={`device-${el}-${idx}`} />);
+
+
+  return _react.default.createElement("div", {
+    id: "main-container"
+  }, deviceRender);
 };
 
 var _default = MainContainer;
@@ -32089,8 +32128,8 @@ var _MainContainer = _interopRequireDefault(require("./containers/MainContainer"
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
-  return _react.default.createElement("section", {
-    id: "main-container"
+  return _react.default.createElement("main", {
+    id: "app"
   }, _react.default.createElement(_MainContainer.default, null));
 };
 
@@ -32137,7 +32176,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50129" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62233" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
