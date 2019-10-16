@@ -106912,17 +106912,17 @@ var Device = function Device(props) {
       proxy = props.proxy;
   var url = "https://fullstack-challenge-api.herokuapp.com/devices/".concat(id, "/readings"); //   const sample = { humidity: [], temperature: [], airquality: [] };
 
-  var _useState = (0, _react.useState)({}),
+  var _useState = (0, _react.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
       humidity = _useState2[0],
       setHumidity = _useState2[1];
 
-  var _useState3 = (0, _react.useState)({}),
+  var _useState3 = (0, _react.useState)([]),
       _useState4 = _slicedToArray(_useState3, 2),
       temp = _useState4[0],
       setTemp = _useState4[1];
 
-  var _useState5 = (0, _react.useState)({}),
+  var _useState5 = (0, _react.useState)([]),
       _useState6 = _slicedToArray(_useState5, 2),
       airQuality = _useState6[0],
       setAirQuality = _useState6[1];
@@ -106968,22 +106968,8 @@ var Device = function Device(props) {
     }).catch(function () {
       throw new Error('error in fetching device readings');
     });
-  }; //   const xTick = [...Array(humidData.length).keys()];
+  };
 
-
-  var data = [{
-    quarter: 1,
-    earnings: 13000
-  }, {
-    quarter: 2,
-    earnings: 16500
-  }, {
-    quarter: 3,
-    earnings: 14250
-  }, {
-    quarter: 4,
-    earnings: 19000
-  }];
   return _react.default.createElement("section", {
     className: "device",
     id: id
@@ -106991,9 +106977,17 @@ var Device = function Device(props) {
     type: "button",
     className: "get-graph-data",
     onClick: handleClick
-  }, "Click Me"), Object.values(humidity).length > 0 && _react.default.createElement(_victory.VictoryChart, {
+  }, "Click Me"), humidity.length > 0 && _react.default.createElement(_victory.VictoryChart, {
     domainPadding: 20
-  }, _react.default.createElement(_victory.VictoryBar, {
+  }, _react.default.createElement(_victory.VictoryAxis, {
+    tickValues: [1, 2, 3, 4, 5],
+    tickFormat: humidity.createdAt
+  }), _react.default.createElement(_victory.VictoryAxis, {
+    dependentAxis: true,
+    tickFormat: function tickFormat(x) {
+      return "".concat(x, "unit");
+    }
+  }), _react.default.createElement(_victory.VictoryBar, {
     data: humidity,
     x: "createdAt",
     y: "value"
@@ -107137,7 +107131,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64160" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60278" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

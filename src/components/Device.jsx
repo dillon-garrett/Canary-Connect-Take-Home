@@ -6,9 +6,9 @@ const Device = props => {
   const { text, id, proxy } = props;
   const url = `https://fullstack-challenge-api.herokuapp.com/devices/${id}/readings`;
   //   const sample = { humidity: [], temperature: [], airquality: [] };
-  const [humidity, setHumidity] = useState({});
-  const [temp, setTemp] = useState({});
-  const [airQuality, setAirQuality] = useState({});
+  const [humidity, setHumidity] = useState([]);
+  const [temp, setTemp] = useState([]);
+  const [airQuality, setAirQuality] = useState([]);
 
   const handleClick = () => {
     fetch(proxy + url, {
@@ -49,21 +49,16 @@ const Device = props => {
       });
   };
 
-  //   const xTick = [...Array(humidData.length).keys()];
-  const data = [
-    { quarter: 1, earnings: 13000 },
-    { quarter: 2, earnings: 16500 },
-    { quarter: 3, earnings: 14250 },
-    { quarter: 4, earnings: 19000 }
-  ];
   return (
     <section className="device" id={id}>
       {text}
       <button type="button" className="get-graph-data" onClick={handleClick}>
         Click Me
       </button>
-      {Object.values(humidity).length > 0 && (
+      {humidity.length > 0 && (
         <VictoryChart domainPadding={20}>
+          <VictoryAxis tickValues={[1, 2, 3, 4, 5]} tickFormat={humidity.createdAt} />
+          <VictoryAxis dependentAxis tickFormat={x => `${x}unit`} />
           <VictoryBar data={humidity} x="createdAt" y="value" />
         </VictoryChart>
       )}
