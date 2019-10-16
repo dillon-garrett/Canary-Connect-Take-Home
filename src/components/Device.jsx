@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
+import Graph from './Graph';
 
 const Device = props => {
   const { text, id, proxy } = props;
@@ -7,13 +8,14 @@ const Device = props => {
   const [humidity, setHumidity] = useState([]);
   const [temp, setTemp] = useState([]);
   const [airQuality, setAirQuality] = useState([]);
-  const [readingType, setReadingType] = useState('');
+  const [readingType, setReadingType] = useState('humidity');
   const [readingToDisplay, setReadingToDisplay] = useState([]);
 
-  const handleClick = event => {
-    if (readingType === 'temperature') setReadingToDisplay(temp);
+  const handleSubmit = event => {
     if (readingType === 'humidity') setReadingToDisplay(humidity);
+    if (readingType === 'temperature') setReadingToDisplay(temp);
     if (readingType === 'airQuality') setReadingToDisplay(airQuality);
+    // setReadingType(event.target.value);
     event.preventDefault();
   };
 
@@ -58,12 +60,12 @@ const Device = props => {
       .catch(() => {
         throw new Error('error in fetching device readings');
       });
-  });
+  }, []);
 
   return (
     <section className="device" id={id}>
       {text}
-      <form onSubmit={handleClick} onChange={handleChange}>
+      <form onSubmit={handleSubmit} onChange={handleChange}>
         <div>
           Select Device Reading:
           <select>
@@ -74,24 +76,9 @@ const Device = props => {
         </div>
         <input type="submit" value="submit" />
       </form>
-      {/* <button type="button" className="get-graph-data" onClick={handleClick}>
-        Humidity
-      </button>
-      <button type="button" className="get-graph-data" onClick={handleClick}>
-        Temperature
-      </button>
-      <button type="button" className="get-graph-data" onClick={handleClick}>
-        Air Quality
-      </button> */}
       {readingToDisplay.length > 0 && (
-        <VictoryChart domainPadding={20}>
-          <VictoryAxis tickValues={[1, 2, 3, 4, 5]} tickFormat={humidity.createdAt} />
-          <VictoryAxis dependentAxis tickFormat={x => `${x}%`} />
-          <VictoryBar data={readingToDisplay} x="createdAt" y="value" />
-        </VictoryChart>
+        <Graph readingType={readingType} readingToDisplay={readingToDisplay} />
       )}
-      {/* <XYPlot height={300} width={300} />
-      <LineSeries data={data} /> */}
     </section>
   );
 };

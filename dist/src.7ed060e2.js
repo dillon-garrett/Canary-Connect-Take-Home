@@ -80510,7 +80510,7 @@ var _victorySharedEvents = require("victory-shared-events");
 var _victoryAxis = require("victory-axis");
 
 var _victoryPolarAxis = require("victory-polar-axis");
-},{"victory-core":"../node_modules/victory-core/es/index.js","victory-chart":"../node_modules/victory-chart/es/index.js","victory-group":"../node_modules/victory-group/es/index.js","victory-stack":"../node_modules/victory-stack/es/index.js","victory-pie":"../node_modules/victory-pie/es/index.js","victory-area":"../node_modules/victory-area/es/index.js","victory-bar":"../node_modules/victory-bar/es/index.js","victory-candlestick":"../node_modules/victory-candlestick/es/index.js","victory-errorbar":"../node_modules/victory-errorbar/es/index.js","victory-line":"../node_modules/victory-line/es/index.js","victory-scatter":"../node_modules/victory-scatter/es/index.js","victory-box-plot":"../node_modules/victory-box-plot/es/index.js","victory-voronoi":"../node_modules/victory-voronoi/es/index.js","victory-brush-line":"../node_modules/victory-brush-line/es/index.js","victory-brush-container":"../node_modules/victory-brush-container/es/index.js","victory-cursor-container":"../node_modules/victory-cursor-container/es/index.js","victory-selection-container":"../node_modules/victory-selection-container/es/index.js","victory-voronoi-container":"../node_modules/victory-voronoi-container/es/index.js","victory-zoom-container":"../node_modules/victory-zoom-container/es/index.js","victory-create-container":"../node_modules/victory-create-container/es/index.js","victory-tooltip":"../node_modules/victory-tooltip/es/index.js","victory-legend":"../node_modules/victory-legend/es/index.js","victory-shared-events":"../node_modules/victory-shared-events/es/index.js","victory-axis":"../node_modules/victory-axis/es/index.js","victory-polar-axis":"../node_modules/victory-polar-axis/es/index.js"}],"../src/components/Device.jsx":[function(require,module,exports) {
+},{"victory-core":"../node_modules/victory-core/es/index.js","victory-chart":"../node_modules/victory-chart/es/index.js","victory-group":"../node_modules/victory-group/es/index.js","victory-stack":"../node_modules/victory-stack/es/index.js","victory-pie":"../node_modules/victory-pie/es/index.js","victory-area":"../node_modules/victory-area/es/index.js","victory-bar":"../node_modules/victory-bar/es/index.js","victory-candlestick":"../node_modules/victory-candlestick/es/index.js","victory-errorbar":"../node_modules/victory-errorbar/es/index.js","victory-line":"../node_modules/victory-line/es/index.js","victory-scatter":"../node_modules/victory-scatter/es/index.js","victory-box-plot":"../node_modules/victory-box-plot/es/index.js","victory-voronoi":"../node_modules/victory-voronoi/es/index.js","victory-brush-line":"../node_modules/victory-brush-line/es/index.js","victory-brush-container":"../node_modules/victory-brush-container/es/index.js","victory-cursor-container":"../node_modules/victory-cursor-container/es/index.js","victory-selection-container":"../node_modules/victory-selection-container/es/index.js","victory-voronoi-container":"../node_modules/victory-voronoi-container/es/index.js","victory-zoom-container":"../node_modules/victory-zoom-container/es/index.js","victory-create-container":"../node_modules/victory-create-container/es/index.js","victory-tooltip":"../node_modules/victory-tooltip/es/index.js","victory-legend":"../node_modules/victory-legend/es/index.js","victory-shared-events":"../node_modules/victory-shared-events/es/index.js","victory-axis":"../node_modules/victory-axis/es/index.js","victory-polar-axis":"../node_modules/victory-polar-axis/es/index.js"}],"../src/components/Graph.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80521,6 +80521,58 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 
 var _victory = require("victory");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var Graph = function Graph(props) {
+  var readingType = props.readingType,
+      readingToDisplay = props.readingToDisplay;
+  var tickValues = []; //   const tickFormatX = [];
+
+  var tickFormatY = '';
+  if (readingType === 'humidity') tickFormatY = '%';
+  if (readingType === 'temperature') tickFormatY = '°F';
+
+  for (var i = 1; i < readingToDisplay.length - 1; i += 1) {
+    tickValues.push(i);
+  }
+
+  return _react.default.createElement(_victory.VictoryChart, {
+    domainPadding: 20
+  }, _react.default.createElement(_victory.VictoryAxis, {
+    tickValues: tickValues,
+    tickFormat: readingToDisplay.createdAt
+  }), _react.default.createElement(_victory.VictoryAxis, {
+    dependentAxis: true,
+    tickFormat: function tickFormat(x) {
+      return "".concat(x).concat(tickFormatY);
+    }
+  }), _react.default.createElement(_victory.VictoryBar, {
+    data: readingToDisplay,
+    x: "createdAt",
+    y: "value"
+  }));
+};
+
+var _default = Graph;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","victory":"../node_modules/victory/es/index.js"}],"../src/components/Device.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _victory = require("victory");
+
+var _Graph = _interopRequireDefault(require("./Graph"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -80555,7 +80607,7 @@ var Device = function Device(props) {
       airQuality = _useState6[0],
       setAirQuality = _useState6[1];
 
-  var _useState7 = (0, _react.useState)(''),
+  var _useState7 = (0, _react.useState)('humidity'),
       _useState8 = _slicedToArray(_useState7, 2),
       readingType = _useState8[0],
       setReadingType = _useState8[1];
@@ -80565,10 +80617,11 @@ var Device = function Device(props) {
       readingToDisplay = _useState10[0],
       setReadingToDisplay = _useState10[1];
 
-  var handleClick = function handleClick(event) {
-    if (readingType === 'temperature') setReadingToDisplay(temp);
+  var handleSubmit = function handleSubmit(event) {
     if (readingType === 'humidity') setReadingToDisplay(humidity);
-    if (readingType === 'airQuality') setReadingToDisplay(airQuality);
+    if (readingType === 'temperature') setReadingToDisplay(temp);
+    if (readingType === 'airQuality') setReadingToDisplay(airQuality); // setReadingType(event.target.value);
+
     event.preventDefault();
   };
 
@@ -80617,12 +80670,12 @@ var Device = function Device(props) {
     }).catch(function () {
       throw new Error('error in fetching device readings');
     });
-  });
+  }, []);
   return _react.default.createElement("section", {
     className: "device",
     id: id
   }, text, _react.default.createElement("form", {
-    onSubmit: handleClick,
+    onSubmit: handleSubmit,
     onChange: handleChange
   }, _react.default.createElement("div", null, "Select Device Reading:", _react.default.createElement("select", null, _react.default.createElement("option", {
     value: "humidity"
@@ -80633,26 +80686,15 @@ var Device = function Device(props) {
   }, "Air Quality"))), _react.default.createElement("input", {
     type: "submit",
     value: "submit"
-  })), readingToDisplay.length > 0 && _react.default.createElement(_victory.VictoryChart, {
-    domainPadding: 20
-  }, _react.default.createElement(_victory.VictoryAxis, {
-    tickValues: [1, 2, 3, 4, 5],
-    tickFormat: humidity.createdAt
-  }), _react.default.createElement(_victory.VictoryAxis, {
-    dependentAxis: true,
-    tickFormat: function tickFormat(x) {
-      return "".concat(x, "%");
-    }
-  }), _react.default.createElement(_victory.VictoryBar, {
-    data: readingToDisplay,
-    x: "createdAt",
-    y: "value"
-  })));
+  })), readingToDisplay.length > 0 && _react.default.createElement(_Graph.default, {
+    readingType: readingType,
+    readingToDisplay: readingToDisplay
+  }));
 };
 
 var _default = Device;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","victory":"../node_modules/victory/es/index.js"}],"../src/containers/MainContainer.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","victory":"../node_modules/victory/es/index.js","./Graph":"../src/components/Graph.jsx"}],"../src/containers/MainContainer.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80714,8 +80756,7 @@ var MainContainer = function MainContainer() {
       key: devices[x],
       proxy: proxy
     }));
-  } //   const deviceRender = devices.map((el, idx) => <Device text={el} key={`device-${el}-${idx}`} />);
-
+  }
 
   return _react.default.createElement("div", {
     id: "main-container"
@@ -80787,7 +80828,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50990" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54799" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
