@@ -21,7 +21,8 @@
     "parcel-bundler": "^1.12.4",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-vis": "^1.11.7"
+    "react-vis": "^1.11.7",
+    "victory": "^33.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
