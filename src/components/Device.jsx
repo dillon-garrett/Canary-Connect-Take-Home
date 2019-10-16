@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { XYPlot, LineSeries } from 'react-vis';
 import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
 
 const Device = props => {
@@ -10,7 +9,7 @@ const Device = props => {
   const [temp, setTemp] = useState([]);
   const [airQuality, setAirQuality] = useState([]);
 
-  const handleClick = () => {
+  const handleClick = event => {
     fetch(proxy + url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -47,18 +46,36 @@ const Device = props => {
       .catch(() => {
         throw new Error('error in fetching device readings');
       });
+    event.preventDefault();
   };
 
   return (
     <section className="device" id={id}>
       {text}
-      <button type="button" className="get-graph-data" onClick={handleClick}>
-        Click Me
+      <form onSubmit={handleClick}>
+        <div>
+          Select Device Reading:
+          <select>
+            <option value="humidity">Humidity</option>
+            <option value="temperature">Temperature</option>
+            <option value="airQuality">Air Quality</option>
+          </select>
+        </div>
+        <input type="submit" value="submit" />
+      </form>
+      {/* <button type="button" className="get-graph-data" onClick={handleClick}>
+        Humidity
       </button>
+      <button type="button" className="get-graph-data" onClick={handleClick}>
+        Temperature
+      </button>
+      <button type="button" className="get-graph-data" onClick={handleClick}>
+        Air Quality
+      </button> */}
       {humidity.length > 0 && (
         <VictoryChart domainPadding={20}>
           <VictoryAxis tickValues={[1, 2, 3, 4, 5]} tickFormat={humidity.createdAt} />
-          <VictoryAxis dependentAxis tickFormat={x => `${x}unit`} />
+          <VictoryAxis dependentAxis tickFormat={x => `${x}%`} />
           <VictoryBar data={humidity} x="createdAt" y="value" />
         </VictoryChart>
       )}
