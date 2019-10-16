@@ -5,8 +5,10 @@ import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
 const Device = props => {
   const { text, id, proxy } = props;
   const url = `https://fullstack-challenge-api.herokuapp.com/devices/${id}/readings`;
-  const sample = { humidity: [], temperature: [], airquality: [] };
-  const [readings, setReadings] = useState(sample);
+  //   const sample = { humidity: [], temperature: [], airquality: [] };
+  const [humidity, setHumidity] = useState({});
+  const [temp, setTemp] = useState({});
+  const [airQuality, setAirQuality] = useState({});
 
   const handleClick = () => {
     fetch(proxy + url, {
@@ -16,28 +18,38 @@ const Device = props => {
     })
       .then(res => res.json())
       .then(response => {
-        const readingsObj = { humidity: [], temperature: [], airquality: [] };
+        // const readingsObj = { humidity: [], temperature: [], airquality: [] };
+        const humidArr = [];
+        const tempArr = [];
+        const airArr = [];
         response.forEach(el => {
-          if (el.type === 'humidity') readingsObj.humidity.push(el.value);
-          if (el.type === 'temperature') readingsObj.temperature.push(el.value);
-          if (el.type === 'airquality') readingsObj.airquality.push(el.value);
+          const obj = {};
+          if (el.type === 'humidity') {
+            obj.createdAt = el.createdAt;
+            obj.value = el.value;
+            humidArr.push(obj);
+          }
+          if (el.type === 'temperature') {
+            obj.createdAt = el.createdAt;
+            obj.value = el.value;
+            tempArr.push(obj);
+          }
+          if (el.type === 'airquality') {
+            obj.createdAt = el.createdAt;
+            obj.value = el.value;
+            airArr.push(obj);
+          }
         });
-        setReadings(readingsObj);
+        setHumidity(humidArr);
+        setTemp(tempArr);
+        setAirQuality(airArr);
       })
       .catch(() => {
         throw new Error('error in fetching device readings');
       });
   };
 
-  const humidData = [];
-  for (let i = 0; i < readings.humidity.length - 1; i += 1) {
-    const obj = { index: 0, humidity: 0 };
-    obj.index = i;
-    obj.humidity = readings.humidity[i];
-    humidData.push(obj);
-  }
-
-  const xTick = [...Array(humidData.length).keys()];
+  //   const xTick = [...Array(humidData.length).keys()];
   const data = [
     { quarter: 1, earnings: 13000 },
     { quarter: 2, earnings: 16500 },
@@ -50,14 +62,11 @@ const Device = props => {
       <button type="button" className="get-graph-data" onClick={handleClick}>
         Click Me
       </button>
-      <VictoryChart domainPadding={20}>
-        <VictoryAxis
-          tickValues={[1, 2, 3, 4]}
-          tickFormat={['Quarter 1', 'Quarter 2', 'Quarter 3', 'Quarter 4']}
-        />
-        <VictoryAxis dependentAxis tickFormat={x => `$${x / 1000}k`} />
-        <VictoryBar data={data} x="quarter" y="earnings" />
-      </VictoryChart>
+      {Object.values(humidity).length > 0 && (
+        <VictoryChart domainPadding={20}>
+          <VictoryBar data={humidity} x="createdAt" y="value" />
+        </VictoryChart>
+      )}
       {/* <XYPlot height={300} width={300} />
       <LineSeries data={data} /> */}
     </section>

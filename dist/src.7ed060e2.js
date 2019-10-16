@@ -106898,14 +106898,6 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -106918,17 +106910,22 @@ var Device = function Device(props) {
   var text = props.text,
       id = props.id,
       proxy = props.proxy;
-  var url = "https://fullstack-challenge-api.herokuapp.com/devices/".concat(id, "/readings");
-  var sample = {
-    humidity: [],
-    temperature: [],
-    airquality: []
-  };
+  var url = "https://fullstack-challenge-api.herokuapp.com/devices/".concat(id, "/readings"); //   const sample = { humidity: [], temperature: [], airquality: [] };
 
-  var _useState = (0, _react.useState)(sample),
+  var _useState = (0, _react.useState)({}),
       _useState2 = _slicedToArray(_useState, 2),
-      readings = _useState2[0],
-      setReadings = _useState2[1];
+      humidity = _useState2[0],
+      setHumidity = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({}),
+      _useState4 = _slicedToArray(_useState3, 2),
+      temp = _useState4[0],
+      setTemp = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({}),
+      _useState6 = _slicedToArray(_useState5, 2),
+      airQuality = _useState6[0],
+      setAirQuality = _useState6[1];
 
   var handleClick = function handleClick() {
     fetch(proxy + url, {
@@ -106940,35 +106937,39 @@ var Device = function Device(props) {
     }).then(function (res) {
       return res.json();
     }).then(function (response) {
-      var readingsObj = {
-        humidity: [],
-        temperature: [],
-        airquality: []
-      };
+      // const readingsObj = { humidity: [], temperature: [], airquality: [] };
+      var humidArr = [];
+      var tempArr = [];
+      var airArr = [];
       response.forEach(function (el) {
-        if (el.type === 'humidity') readingsObj.humidity.push(el.value);
-        if (el.type === 'temperature') readingsObj.temperature.push(el.value);
-        if (el.type === 'airquality') readingsObj.airquality.push(el.value);
+        var obj = {};
+
+        if (el.type === 'humidity') {
+          obj.createdAt = el.createdAt;
+          obj.value = el.value;
+          humidArr.push(obj);
+        }
+
+        if (el.type === 'temperature') {
+          obj.createdAt = el.createdAt;
+          obj.value = el.value;
+          tempArr.push(obj);
+        }
+
+        if (el.type === 'airquality') {
+          obj.createdAt = el.createdAt;
+          obj.value = el.value;
+          airArr.push(obj);
+        }
       });
-      setReadings(readingsObj);
+      setHumidity(humidArr);
+      setTemp(tempArr);
+      setAirQuality(airArr);
     }).catch(function () {
       throw new Error('error in fetching device readings');
     });
-  };
+  }; //   const xTick = [...Array(humidData.length).keys()];
 
-  var humidData = [];
-
-  for (var i = 0; i < readings.humidity.length - 1; i += 1) {
-    var obj = {
-      index: 0,
-      humidity: 0
-    };
-    obj.index = i;
-    obj.humidity = readings.humidity[i];
-    humidData.push(obj);
-  }
-
-  var xTick = _toConsumableArray(Array(humidData.length).keys());
 
   var data = [{
     quarter: 1,
@@ -106990,20 +106991,12 @@ var Device = function Device(props) {
     type: "button",
     className: "get-graph-data",
     onClick: handleClick
-  }, "Click Me"), _react.default.createElement(_victory.VictoryChart, {
+  }, "Click Me"), Object.values(humidity).length > 0 && _react.default.createElement(_victory.VictoryChart, {
     domainPadding: 20
-  }, _react.default.createElement(_victory.VictoryAxis, {
-    tickValues: [1, 2, 3, 4],
-    tickFormat: ['Quarter 1', 'Quarter 2', 'Quarter 3', 'Quarter 4']
-  }), _react.default.createElement(_victory.VictoryAxis, {
-    dependentAxis: true,
-    tickFormat: function tickFormat(x) {
-      return "$".concat(x / 1000, "k");
-    }
-  }), _react.default.createElement(_victory.VictoryBar, {
-    data: data,
-    x: "quarter",
-    y: "earnings"
+  }, _react.default.createElement(_victory.VictoryBar, {
+    data: humidity,
+    x: "createdAt",
+    y: "value"
   })));
 };
 
@@ -107144,7 +107137,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51413" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64160" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
