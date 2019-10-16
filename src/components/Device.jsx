@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
 
 const Device = props => {
   const { text, id, proxy } = props;
   const url = `https://fullstack-challenge-api.herokuapp.com/devices/${id}/readings`;
-  //   const sample = { humidity: [], temperature: [], airquality: [] };
   const [humidity, setHumidity] = useState([]);
   const [temp, setTemp] = useState([]);
   const [airQuality, setAirQuality] = useState([]);
+  const [readingType, setReadingType] = useState('');
+  const [readingToDisplay, setReadingToDisplay] = useState([]);
 
   const handleClick = event => {
+    if (readingType === 'temperature') setReadingToDisplay(temp);
+    if (readingType === 'humidity') setReadingToDisplay(humidity);
+    if (readingType === 'airQuality') setReadingToDisplay(airQuality);
+    event.preventDefault();
+  };
+
+  const handleChange = event => {
+    setReadingType(event.target.value);
+  };
+
+  useEffect(() => {
     fetch(proxy + url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -46,13 +58,12 @@ const Device = props => {
       .catch(() => {
         throw new Error('error in fetching device readings');
       });
-    event.preventDefault();
-  };
+  });
 
   return (
     <section className="device" id={id}>
       {text}
-      <form onSubmit={handleClick}>
+      <form onSubmit={handleClick} onChange={handleChange}>
         <div>
           Select Device Reading:
           <select>
@@ -72,11 +83,11 @@ const Device = props => {
       <button type="button" className="get-graph-data" onClick={handleClick}>
         Air Quality
       </button> */}
-      {humidity.length > 0 && (
+      {readingToDisplay.length > 0 && (
         <VictoryChart domainPadding={20}>
           <VictoryAxis tickValues={[1, 2, 3, 4, 5]} tickFormat={humidity.createdAt} />
           <VictoryAxis dependentAxis tickFormat={x => `${x}%`} />
-          <VictoryBar data={humidity} x="createdAt" y="value" />
+          <VictoryBar data={readingToDisplay} x="createdAt" y="value" />
         </VictoryChart>
       )}
       {/* <XYPlot height={300} width={300} />

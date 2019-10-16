@@ -80538,7 +80538,7 @@ var Device = function Device(props) {
   var text = props.text,
       id = props.id,
       proxy = props.proxy;
-  var url = "https://fullstack-challenge-api.herokuapp.com/devices/".concat(id, "/readings"); //   const sample = { humidity: [], temperature: [], airquality: [] };
+  var url = "https://fullstack-challenge-api.herokuapp.com/devices/".concat(id, "/readings");
 
   var _useState = (0, _react.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -80555,7 +80555,28 @@ var Device = function Device(props) {
       airQuality = _useState6[0],
       setAirQuality = _useState6[1];
 
+  var _useState7 = (0, _react.useState)(''),
+      _useState8 = _slicedToArray(_useState7, 2),
+      readingType = _useState8[0],
+      setReadingType = _useState8[1];
+
+  var _useState9 = (0, _react.useState)([]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      readingToDisplay = _useState10[0],
+      setReadingToDisplay = _useState10[1];
+
   var handleClick = function handleClick(event) {
+    if (readingType === 'temperature') setReadingToDisplay(temp);
+    if (readingType === 'humidity') setReadingToDisplay(humidity);
+    if (readingType === 'airQuality') setReadingToDisplay(airQuality);
+    event.preventDefault();
+  };
+
+  var handleChange = function handleChange(event) {
+    setReadingType(event.target.value);
+  };
+
+  (0, _react.useEffect)(function () {
     fetch(proxy + url, {
       method: 'GET',
       headers: {
@@ -80596,14 +80617,13 @@ var Device = function Device(props) {
     }).catch(function () {
       throw new Error('error in fetching device readings');
     });
-    event.preventDefault();
-  };
-
+  });
   return _react.default.createElement("section", {
     className: "device",
     id: id
   }, text, _react.default.createElement("form", {
-    onSubmit: handleClick
+    onSubmit: handleClick,
+    onChange: handleChange
   }, _react.default.createElement("div", null, "Select Device Reading:", _react.default.createElement("select", null, _react.default.createElement("option", {
     value: "humidity"
   }, "Humidity"), _react.default.createElement("option", {
@@ -80613,7 +80633,7 @@ var Device = function Device(props) {
   }, "Air Quality"))), _react.default.createElement("input", {
     type: "submit",
     value: "submit"
-  })), humidity.length > 0 && _react.default.createElement(_victory.VictoryChart, {
+  })), readingToDisplay.length > 0 && _react.default.createElement(_victory.VictoryChart, {
     domainPadding: 20
   }, _react.default.createElement(_victory.VictoryAxis, {
     tickValues: [1, 2, 3, 4, 5],
@@ -80624,7 +80644,7 @@ var Device = function Device(props) {
       return "".concat(x, "%");
     }
   }), _react.default.createElement(_victory.VictoryBar, {
-    data: humidity,
+    data: readingToDisplay,
     x: "createdAt",
     y: "value"
   })));
@@ -80767,7 +80787,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59760" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50990" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
