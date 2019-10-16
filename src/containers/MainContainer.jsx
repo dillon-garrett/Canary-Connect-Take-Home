@@ -26,7 +26,7 @@ const MainContainer = () => {
   }, []);
 
   const deviceRender = [];
-  for (let x in devices) {
+  for (const x in devices) {
     deviceRender.push(<Device text={x} id={devices[x]} key={devices[x]} proxy={proxy} />);
   }
   return <div id="main-container">{deviceRender}</div>;

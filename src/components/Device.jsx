@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
 import Graph from './Graph';
 
 const Device = props => {
@@ -9,13 +8,14 @@ const Device = props => {
   const [temp, setTemp] = useState([]);
   const [airQuality, setAirQuality] = useState([]);
   const [readingType, setReadingType] = useState('humidity');
+  const [yAxisDisplay, setYAxisDisplay] = useState('humidity');
   const [readingToDisplay, setReadingToDisplay] = useState([]);
 
   const handleSubmit = event => {
     if (readingType === 'humidity') setReadingToDisplay(humidity);
     if (readingType === 'temperature') setReadingToDisplay(temp);
     if (readingType === 'airQuality') setReadingToDisplay(airQuality);
-    // setReadingType(event.target.value);
+    setYAxisDisplay(readingType);
     event.preventDefault();
   };
 
@@ -77,7 +77,7 @@ const Device = props => {
         <input type="submit" value="submit" />
       </form>
       {readingToDisplay.length > 0 && (
-        <Graph readingType={readingType} readingToDisplay={readingToDisplay} />
+        <Graph yAxisDisplay={yAxisDisplay} readingToDisplay={readingToDisplay} />
       )}
     </section>
   );

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { VictoryBar, VictoryChart, VictoryAxis } from 'victory';
 
 const Graph = props => {
-  const { readingType, readingToDisplay } = props;
+  const { yAxisDisplay, readingToDisplay } = props;
   const tickValues = [];
-//   const tickFormatX = [];
+  //   const tickFormatX = [];
   let tickFormatY = '';
 
-  if (readingType === 'humidity') tickFormatY = '%';
-  if (readingType === 'temperature') tickFormatY = '°F';
+  if (yAxisDisplay === 'humidity') tickFormatY = '%';
+  if (yAxisDisplay === 'temperature') tickFormatY = '°F';
 
   for (let i = 1; i < readingToDisplay.length - 1; i += 1) {
     tickValues.push(i);

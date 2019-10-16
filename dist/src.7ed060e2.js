@@ -80518,22 +80518,20 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
+var _react = _interopRequireDefault(require("react"));
 
 var _victory = require("victory");
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Graph = function Graph(props) {
-  var readingType = props.readingType,
+  var yAxisDisplay = props.yAxisDisplay,
       readingToDisplay = props.readingToDisplay;
   var tickValues = []; //   const tickFormatX = [];
 
   var tickFormatY = '';
-  if (readingType === 'humidity') tickFormatY = '%';
-  if (readingType === 'temperature') tickFormatY = '°F';
+  if (yAxisDisplay === 'humidity') tickFormatY = '%';
+  if (yAxisDisplay === 'temperature') tickFormatY = '°F';
 
   for (var i = 1; i < readingToDisplay.length - 1; i += 1) {
     tickValues.push(i);
@@ -80567,8 +80565,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
-
-var _victory = require("victory");
 
 var _Graph = _interopRequireDefault(require("./Graph"));
 
@@ -80612,16 +80608,21 @@ var Device = function Device(props) {
       readingType = _useState8[0],
       setReadingType = _useState8[1];
 
-  var _useState9 = (0, _react.useState)([]),
+  var _useState9 = (0, _react.useState)('humidity'),
       _useState10 = _slicedToArray(_useState9, 2),
-      readingToDisplay = _useState10[0],
-      setReadingToDisplay = _useState10[1];
+      yAxisDisplay = _useState10[0],
+      setYAxisDisplay = _useState10[1];
+
+  var _useState11 = (0, _react.useState)([]),
+      _useState12 = _slicedToArray(_useState11, 2),
+      readingToDisplay = _useState12[0],
+      setReadingToDisplay = _useState12[1];
 
   var handleSubmit = function handleSubmit(event) {
     if (readingType === 'humidity') setReadingToDisplay(humidity);
     if (readingType === 'temperature') setReadingToDisplay(temp);
-    if (readingType === 'airQuality') setReadingToDisplay(airQuality); // setReadingType(event.target.value);
-
+    if (readingType === 'airQuality') setReadingToDisplay(airQuality);
+    setYAxisDisplay(readingType);
     event.preventDefault();
   };
 
@@ -80687,14 +80688,14 @@ var Device = function Device(props) {
     type: "submit",
     value: "submit"
   })), readingToDisplay.length > 0 && _react.default.createElement(_Graph.default, {
-    readingType: readingType,
+    yAxisDisplay: yAxisDisplay,
     readingToDisplay: readingToDisplay
   }));
 };
 
 var _default = Device;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","victory":"../node_modules/victory/es/index.js","./Graph":"../src/components/Graph.jsx"}],"../src/containers/MainContainer.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./Graph":"../src/components/Graph.jsx"}],"../src/containers/MainContainer.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80828,7 +80829,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54799" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62198" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
