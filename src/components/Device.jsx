@@ -8,14 +8,14 @@ const Device = props => {
   const [temp, setTemp] = useState([]);
   const [airQuality, setAirQuality] = useState([]);
   const [readingType, setReadingType] = useState('humidity');
-  const [yAxisDisplay, setYAxisDisplay] = useState('humidity');
+  const [yAxisDisplay, setYAxisDisplay] = useState('');
   const [readingToDisplay, setReadingToDisplay] = useState([]);
 
   const handleSubmit = event => {
+    setYAxisDisplay(readingType);
     if (readingType === 'humidity') setReadingToDisplay(humidity);
     if (readingType === 'temperature') setReadingToDisplay(temp);
     if (readingType === 'airQuality') setReadingToDisplay(airQuality);
-    setYAxisDisplay(readingType);
     event.preventDefault();
   };
 

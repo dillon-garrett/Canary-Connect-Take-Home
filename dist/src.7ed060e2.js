@@ -80518,27 +80518,63 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _victory = require("victory");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var Graph = function Graph(props) {
   var yAxisDisplay = props.yAxisDisplay,
       readingToDisplay = props.readingToDisplay;
+
+  var _useState = (0, _react.useState)(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      colorScheme = _useState2[0],
+      setColorScheme = _useState2[1];
+
   var tickValues = []; //   const tickFormatX = [];
 
   var tickFormatY = '';
-  if (yAxisDisplay === 'humidity') tickFormatY = '%';
-  if (yAxisDisplay === 'temperature') tickFormatY = '°F';
+  (0, _react.useEffect)(function () {
+    if (yAxisDisplay === 'humidity') {
+      tickFormatY = '%';
+      setColorScheme('cool');
+    }
+
+    if (yAxisDisplay === 'temperature') {
+      tickFormatY = '°F';
+      setColorScheme('warm');
+    }
+
+    if (yAxisDisplay === 'airQuality') {
+      setColorScheme('green');
+    }
+  });
 
   for (var i = 1; i < readingToDisplay.length - 1; i += 1) {
     tickValues.push(i);
   }
 
   return _react.default.createElement(_victory.VictoryChart, {
-    domainPadding: 20
+    domainPadding: 20,
+    theme: _victory.VictoryTheme.material,
+    animate: {
+      duration: 1000,
+      onLoad: {
+        duration: 500
+      }
+    }
   }, _react.default.createElement(_victory.VictoryAxis, {
     tickValues: tickValues,
     tickFormat: readingToDisplay.createdAt
@@ -80547,11 +80583,13 @@ var Graph = function Graph(props) {
     tickFormat: function tickFormat(x) {
       return "".concat(x).concat(tickFormatY);
     }
-  }), _react.default.createElement(_victory.VictoryBar, {
+  }), _react.default.createElement(_victory.VictoryStack, {
+    colorScale: colorScheme
+  }, _react.default.createElement(_victory.VictoryBar, {
     data: readingToDisplay,
     x: "createdAt",
     y: "value"
-  }));
+  })));
 };
 
 var _default = Graph;
@@ -80608,7 +80646,7 @@ var Device = function Device(props) {
       readingType = _useState8[0],
       setReadingType = _useState8[1];
 
-  var _useState9 = (0, _react.useState)('humidity'),
+  var _useState9 = (0, _react.useState)(''),
       _useState10 = _slicedToArray(_useState9, 2),
       yAxisDisplay = _useState10[0],
       setYAxisDisplay = _useState10[1];
@@ -80619,10 +80657,10 @@ var Device = function Device(props) {
       setReadingToDisplay = _useState12[1];
 
   var handleSubmit = function handleSubmit(event) {
+    setYAxisDisplay(readingType);
     if (readingType === 'humidity') setReadingToDisplay(humidity);
     if (readingType === 'temperature') setReadingToDisplay(temp);
     if (readingType === 'airQuality') setReadingToDisplay(airQuality);
-    setYAxisDisplay(readingType);
     event.preventDefault();
   };
 
@@ -80829,7 +80867,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62198" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53784" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
