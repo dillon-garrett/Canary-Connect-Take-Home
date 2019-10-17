@@ -37,7 +37,6 @@ const Device = props => {
     })
       .then(res => res.json())
       .then(response => {
-        // const readingsObj = { humidity: [], temperature: [], airquality: [] };
         const humidArr = [];
         const tempArr = [];
         const airArr = [];
@@ -69,9 +68,9 @@ const Device = props => {
   }, []);
 
   return (
-    <section className="device" id={id}>
-      {text}
-      <form onSubmit={handleSubmit} onChange={handleChange}>
+    <section className="device" id={text.slice(0, 4)}>
+      <div id="device-text">{text}</div>
+      <form onSubmit={handleSubmit} onChange={handleChange} className="select-reading">
         <div>
           Select Device Reading:
           <select>
@@ -82,12 +81,15 @@ const Device = props => {
         </div>
         <input type="submit" value="submit" className="button" />
       </form>
-      <button type="submit" onClick={hideGraph} className="button">
-        Hide Graph
-      </button>
       {readingToDisplay.length > 0 && isGraphHidden === false && (
         <Graph yAxisDisplay={yAxisDisplay} readingToDisplay={readingToDisplay} />
       )}
+      {readingToDisplay.length === 0 && yAxisDisplay !== '' && (
+        <h1 id="empty-data">Sensor Reading Unavailable</h1>
+      )}
+      <button type="submit" onClick={hideGraph} className="button">
+        Hide Graph
+      </button>
     </section>
   );
 };

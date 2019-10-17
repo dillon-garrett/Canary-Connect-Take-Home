@@ -1,0 +1,31 @@
+body {
+    font-family: Helvetica, sans-serif;
+}
+
+#main-container {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    grid-gap: 10px;
+}
+
+
+/* #Malo {
+    background-color: #8E6E95;
+    color: white;
+}
+
+#Figg {
+    background-color: #39a59c;
+    color: white;
+}
+
+#Cana {
+    background-color: #344759;
+    color: white;
+}
+
+#Fron {
+    background-color: #e8741e;
+    color: white;
+} */

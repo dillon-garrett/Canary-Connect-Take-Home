@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel ./public/index.html"
+    "test": "jest --verbose",
+    "start": "parcel ./public/index.html",
+    "build": "parcel build ./public/index.html"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/dillon-garrett/Canary-Connect-Take-Home#readme",
   "dependencies": {
+    "@babel/runtime": "^7.6.3",
     "parcel-bundler": "^1.12.4",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
@@ -25,8 +27,12 @@
     "victory": "^33.1.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-react": "^7.6.3",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "eslint": "^6.5.1",
@@ -37,6 +43,9 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.1.2",
-    "prettier": "^1.18.2"
+    "isomorphic-fetch": "^2.2.1",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "regenerator-runtime": "^0.13.3"
   }
 }

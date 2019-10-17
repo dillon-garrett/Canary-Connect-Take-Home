@@ -80548,6 +80548,11 @@ var Graph = function Graph(props) {
       chartTitle = _useState4[0],
       setChartTitle = _useState4[1];
 
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      isHorizontal = _useState6[0],
+      setIsHorizontal = _useState6[1];
+
   var tickValues = [];
   var tickFormatX = [];
   var tickFormatY = '';
@@ -80556,17 +80561,20 @@ var Graph = function Graph(props) {
       tickFormatY = '%';
       setColorScheme('cool');
       setChartTitle('Humidity Ratings in 2018');
+      setIsHorizontal(false);
     }
 
     if (yAxisDisplay === 'temperature') {
       tickFormatY = '°F';
       setColorScheme('warm');
       setChartTitle('Temperature Ratings in 2018');
+      setIsHorizontal(false);
     }
 
     if (yAxisDisplay === 'airQuality') {
       setColorScheme('grayscale');
       setChartTitle('Air Quality Ratings in 2018');
+      setIsHorizontal(true);
     }
   });
 
@@ -80575,8 +80583,8 @@ var Graph = function Graph(props) {
     var str = ''; // console.log(readingToDisplay[i].createdAt.slice(6, 10), 'this is reading display')
 
     if (readingToDisplay[i].createdAt) {
-      str += readingToDisplay[i].createdAt.slice(6, 10) + ',';
-      str += readingToDisplay[i].createdAt.slice(11, 16);
+      str += readingToDisplay[i].createdAt.slice(6, 10); //   str += readingToDisplay[i].createdAt.slice(11, 13);
+
       tickFormatX.push(str);
     }
   }
@@ -80589,10 +80597,17 @@ var Graph = function Graph(props) {
       onLoad: {
         duration: 500
       }
-    }
+    },
+    style: {
+      labels: {
+        fontSize: 5
+      }
+    },
+    height: 200,
+    horizontal: isHorizontal
   }, _react.default.createElement(_victory.VictoryLabel, {
     text: chartTitle,
-    x: 200,
+    x: 175,
     y: 30,
     textAnchor: "middle"
   }), _react.default.createElement(_victory.VictoryAxis, {
@@ -80607,6 +80622,7 @@ var Graph = function Graph(props) {
     colorScale: colorScheme
   }, _react.default.createElement(_victory.VictoryBar, {
     data: readingToDisplay,
+    height: 150,
     x: "createdAt",
     y: "value" //   height={100}
     //   width={100}
@@ -80705,13 +80721,12 @@ var Device = function Device(props) {
     fetch(proxy + url, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json' //   mode: 'no-cors'
+        'Content-Type': 'application/json'
+      } //   mode: 'no-cors'
 
-      }
     }).then(function (res) {
       return res.json();
     }).then(function (response) {
-      // const readingsObj = { humidity: [], temperature: [], airquality: [] };
       var humidArr = [];
       var tempArr = [];
       var airArr = [];
@@ -80745,10 +80760,13 @@ var Device = function Device(props) {
   }, []);
   return _react.default.createElement("section", {
     className: "device",
-    id: id
-  }, text, _react.default.createElement("form", {
+    id: text.slice(0, 4)
+  }, _react.default.createElement("div", {
+    id: "device-text"
+  }, text), _react.default.createElement("form", {
     onSubmit: handleSubmit,
-    onChange: handleChange
+    onChange: handleChange,
+    className: "select-reading"
   }, _react.default.createElement("div", null, "Select Device Reading:", _react.default.createElement("select", null, _react.default.createElement("option", {
     value: "humidity"
   }, "Humidity"), _react.default.createElement("option", {
@@ -80759,14 +80777,16 @@ var Device = function Device(props) {
     type: "submit",
     value: "submit",
     className: "button"
-  })), _react.default.createElement("button", {
+  })), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement(_Graph.default, {
+    yAxisDisplay: yAxisDisplay,
+    readingToDisplay: readingToDisplay
+  }), readingToDisplay.length === 0 && yAxisDisplay !== '' && _react.default.createElement("h1", {
+    id: "empty-data"
+  }, "Sensor Reading Unavailable"), _react.default.createElement("button", {
     type: "submit",
     onClick: hideGraph,
     className: "button"
-  }, "Hide Graph"), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement(_Graph.default, {
-    yAxisDisplay: yAxisDisplay,
-    readingToDisplay: readingToDisplay
-  }));
+  }, "Hide Graph"));
 };
 
 var _default = Device;
@@ -80809,9 +80829,9 @@ var MainContainer = function MainContainer() {
     fetch(proxy + url, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json' //   mode: 'no-cors'
+        'Content-Type': 'application/json'
+      } //   mode: 'no-cors'
 
-      }
     }).then(function (res) {
       return res.json();
     }).then(function (response) {
@@ -80905,7 +80925,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64756" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54861" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
