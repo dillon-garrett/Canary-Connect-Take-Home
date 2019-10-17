@@ -80543,27 +80543,42 @@ var Graph = function Graph(props) {
       colorScheme = _useState2[0],
       setColorScheme = _useState2[1];
 
-  var tickValues = []; //   const tickFormatX = [];
+  var _useState3 = (0, _react.useState)(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      chartTitle = _useState4[0],
+      setChartTitle = _useState4[1];
 
+  var tickValues = [];
+  var tickFormatX = [];
   var tickFormatY = '';
   (0, _react.useEffect)(function () {
     if (yAxisDisplay === 'humidity') {
       tickFormatY = '%';
       setColorScheme('cool');
+      setChartTitle('Humidity Ratings in 2018');
     }
 
     if (yAxisDisplay === 'temperature') {
       tickFormatY = '°F';
       setColorScheme('warm');
+      setChartTitle('Temperature Ratings in 2018');
     }
 
     if (yAxisDisplay === 'airQuality') {
-      setColorScheme('green');
+      setColorScheme('grayscale');
+      setChartTitle('Air Quality Ratings in 2018');
     }
   });
 
-  for (var i = 1; i < readingToDisplay.length - 1; i += 1) {
-    tickValues.push(i);
+  for (var i = 0; i < readingToDisplay.length; i += 1) {
+    tickValues.push(i + 1);
+    var str = ''; // console.log(readingToDisplay[i].createdAt.slice(6, 10), 'this is reading display')
+
+    if (readingToDisplay[i].createdAt) {
+      str += readingToDisplay[i].createdAt.slice(6, 10) + ',';
+      str += readingToDisplay[i].createdAt.slice(11, 16);
+      tickFormatX.push(str);
+    }
   }
 
   return _react.default.createElement(_victory.VictoryChart, {
@@ -80575,9 +80590,14 @@ var Graph = function Graph(props) {
         duration: 500
       }
     }
-  }, _react.default.createElement(_victory.VictoryAxis, {
+  }, _react.default.createElement(_victory.VictoryLabel, {
+    text: chartTitle,
+    x: 200,
+    y: 30,
+    textAnchor: "middle"
+  }), _react.default.createElement(_victory.VictoryAxis, {
     tickValues: tickValues,
-    tickFormat: readingToDisplay.createdAt
+    tickFormat: tickFormatX
   }), _react.default.createElement(_victory.VictoryAxis, {
     dependentAxis: true,
     tickFormat: function tickFormat(x) {
@@ -80588,7 +80608,10 @@ var Graph = function Graph(props) {
   }, _react.default.createElement(_victory.VictoryBar, {
     data: readingToDisplay,
     x: "createdAt",
-    y: "value"
+    y: "value" //   height={100}
+    //   width={100}
+    //   labels={({ datum }) => `y: ${datum.y}`}
+
   })));
 };
 
@@ -80656,16 +80679,26 @@ var Device = function Device(props) {
       readingToDisplay = _useState12[0],
       setReadingToDisplay = _useState12[1];
 
+  var _useState13 = (0, _react.useState)(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      isGraphHidden = _useState14[0],
+      setIsGraphHidden = _useState14[1];
+
   var handleSubmit = function handleSubmit(event) {
     setYAxisDisplay(readingType);
     if (readingType === 'humidity') setReadingToDisplay(humidity);
     if (readingType === 'temperature') setReadingToDisplay(temp);
     if (readingType === 'airQuality') setReadingToDisplay(airQuality);
+    setIsGraphHidden(false);
     event.preventDefault();
   };
 
   var handleChange = function handleChange(event) {
     setReadingType(event.target.value);
+  };
+
+  var hideGraph = function hideGraph() {
+    if (isGraphHidden === false) setIsGraphHidden(true);
   };
 
   (0, _react.useEffect)(function () {
@@ -80724,8 +80757,13 @@ var Device = function Device(props) {
     value: "airQuality"
   }, "Air Quality"))), _react.default.createElement("input", {
     type: "submit",
-    value: "submit"
-  })), readingToDisplay.length > 0 && _react.default.createElement(_Graph.default, {
+    value: "submit",
+    className: "button"
+  })), _react.default.createElement("button", {
+    type: "submit",
+    onClick: hideGraph,
+    className: "button"
+  }, "Hide Graph"), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement(_Graph.default, {
     yAxisDisplay: yAxisDisplay,
     readingToDisplay: readingToDisplay
   }));
@@ -80867,7 +80905,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53784" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64756" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

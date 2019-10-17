@@ -10,17 +10,23 @@ const Device = props => {
   const [readingType, setReadingType] = useState('humidity');
   const [yAxisDisplay, setYAxisDisplay] = useState('');
   const [readingToDisplay, setReadingToDisplay] = useState([]);
+  const [isGraphHidden, setIsGraphHidden] = useState(false);
 
   const handleSubmit = event => {
     setYAxisDisplay(readingType);
     if (readingType === 'humidity') setReadingToDisplay(humidity);
     if (readingType === 'temperature') setReadingToDisplay(temp);
     if (readingType === 'airQuality') setReadingToDisplay(airQuality);
+    setIsGraphHidden(false);
     event.preventDefault();
   };
 
   const handleChange = event => {
     setReadingType(event.target.value);
+  };
+
+  const hideGraph = () => {
+    if (isGraphHidden === false) setIsGraphHidden(true);
   };
 
   useEffect(() => {
@@ -74,9 +80,12 @@ const Device = props => {
             <option value="airQuality">Air Quality</option>
           </select>
         </div>
-        <input type="submit" value="submit" />
+        <input type="submit" value="submit" className="button" />
       </form>
-      {readingToDisplay.length > 0 && (
+      <button type="submit" onClick={hideGraph} className="button">
+        Hide Graph
+      </button>
+      {readingToDisplay.length > 0 && isGraphHidden === false && (
         <Graph yAxisDisplay={yAxisDisplay} readingToDisplay={readingToDisplay} />
       )}
     </section>
