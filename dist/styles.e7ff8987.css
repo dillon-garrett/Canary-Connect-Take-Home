@@ -1,24 +1,25 @@
 body {
     font-family: Helvetica, sans-serif;
-    margin: 0 !important;
     background-color: #f7f9fb;
+    margin-left: none;
+    margin-bottom: 5px;
 }
 
 #header {
-    display: flex;
-    justify-content: left;
+    display: grid;
+    grid-template-columns: auto;
+    text-align: left;
     align-items: center;
-    /* background-color: #31708b;
-    color: white; */
-    margin-left: 10px;
+    /* margin-left: 10px; */
     margin-top: 0;
-    height: 40px;
-    border-color: lightslategray;
-    border-width: 1px;
-    /* border-bottom: 1px;
-    border-left: none;
-    border-right: none;
-    border-top: none; */
+    /* background-color: black;
+    color: white; */
+}
+
+#header-text {
+    font-style: normal;
+    font-weight: 200;
+    letter-spacing: 0.6px;
 }
 
 #main-container {
@@ -30,18 +31,42 @@ body {
     margin-left: 10px;
 }
 
+#footer {
+    display: grid;
+    align-items: center;
+    justify-content: right;
+    position: fixed;
+    bottom: 0;
+    right: 100;
+    width: 100%;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
 .device {
     background-color: white;
     padding: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-top: 2px solid steelblue;
 }
 
 #device-text {
     display: flex;
     justify-content: left;
     align-items: left;
-    font-size: 25px;
-    margin-bottom: 5px;
+    font-size: 23px;
+    margin-bottom: 6px;
+}
+
+.reading-type {
+    outline: none;
+    margin-left: 6px;
+}
+
+#select-device-reading {
+    margin-top: 3px;
+    margin-right: 10px;
+    margin-bottom: 3px;
 }
 
 .button {
@@ -62,33 +87,13 @@ body {
     color: #5085a5;
 }
 
-.reading-type {
-    outline: none;
-    margin-left: 6px;
-}
-
-#select-device-reading {
+#github-logo {
+    display: grid;
+    justify-content: right;
+    align-items: center;
+    height: 45px;
+    width: 45px;
     margin-right: 10px;
-    margin-bottom: 6px;
 }
-/* #Malo {
-    background-color: #8E6E95;
-    color: white;
-}
-
-#Figg {
-    background-color: #39a59c;
-    color: white;
-}
-
-#Cana {
-    background-color: #344759;
-    color: white;
-}
-
-#Fron {
-    background-color: #e8741e;
-    color: white;
-} */
 
 /*# sourceMappingURL=/styles.e7ff8987.css.map */

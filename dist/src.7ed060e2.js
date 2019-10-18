@@ -80536,7 +80536,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var Graph = function Graph(props) {
   var yAxisDisplay = props.yAxisDisplay,
-      readingToDisplay = props.readingToDisplay;
+      readingToDisplay = props.readingToDisplay; // custom hook for setting the styles and display data for the graph
 
   var _useState = (0, _react.useState)(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -80551,11 +80551,15 @@ var Graph = function Graph(props) {
   var _useState5 = (0, _react.useState)(false),
       _useState6 = _slicedToArray(_useState5, 2),
       isHorizontal = _useState6[0],
-      setIsHorizontal = _useState6[1];
+      setIsHorizontal = _useState6[1]; // styling options for graph. There should be as many tick values as there are data points
 
-  var tickValues = [];
-  var tickFormatX = [];
-  var tickFormatY = '';
+
+  var tickValues = []; // array for data points for "created at" Simplified data string
+
+  var tickFormatX = []; // prop to be used to describe the y axis data
+
+  var tickFormatY = ''; // hook used to set color styling and graph details upon component mount
+
   (0, _react.useEffect)(function () {
     if (yAxisDisplay === 'humidity') {
       tickFormatY = '%';
@@ -80576,59 +80580,59 @@ var Graph = function Graph(props) {
       setChartTitle('Air Quality Ratings in 2018');
       setIsHorizontal(true);
     }
-  });
+  }); // iteration to grab the number of tickValues for the X axis and to simplify the x axis createdAt string
 
   for (var i = 0; i < readingToDisplay.length; i += 1) {
     tickValues.push(i + 1);
-    var str = ''; // console.log(readingToDisplay[i].createdAt.slice(6, 10), 'this is reading display')
+    var str = '';
 
     if (readingToDisplay[i].createdAt) {
-      str += readingToDisplay[i].createdAt.slice(6, 10); //   str += readingToDisplay[i].createdAt.slice(11, 13);
+      str += readingToDisplay[i].createdAt.slice(6, 10); // commented out below is for formatting time of day
+      //   str += readingToDisplay[i].createdAt.slice(11, 13);
 
       tickFormatX.push(str);
     }
   }
 
-  return _react.default.createElement(_victory.VictoryChart, {
-    domainPadding: 20,
-    theme: _victory.VictoryTheme.material,
-    animate: {
-      duration: 1000,
-      onLoad: {
-        duration: 500
+  return (// graphing library with passed in props to render each graph differently
+    _react.default.createElement(_victory.VictoryChart, {
+      domainPadding: 20,
+      theme: _victory.VictoryTheme.material,
+      animate: {
+        duration: 1000,
+        onLoad: {
+          duration: 500
+        }
+      },
+      style: {
+        labels: {
+          fontSize: 5
+        }
+      },
+      height: 200,
+      horizontal: isHorizontal
+    }, _react.default.createElement(_victory.VictoryLabel, {
+      text: chartTitle,
+      x: 175,
+      y: 30,
+      textAnchor: "middle"
+    }), _react.default.createElement(_victory.VictoryAxis, {
+      tickValues: tickValues,
+      tickFormat: tickFormatX
+    }), _react.default.createElement(_victory.VictoryAxis, {
+      dependentAxis: true,
+      tickFormat: function tickFormat(x) {
+        return "".concat(x).concat(tickFormatY);
       }
-    },
-    style: {
-      labels: {
-        fontSize: 5
-      }
-    },
-    height: 200,
-    horizontal: isHorizontal
-  }, _react.default.createElement(_victory.VictoryLabel, {
-    text: chartTitle,
-    x: 175,
-    y: 30,
-    textAnchor: "middle"
-  }), _react.default.createElement(_victory.VictoryAxis, {
-    tickValues: tickValues,
-    tickFormat: tickFormatX
-  }), _react.default.createElement(_victory.VictoryAxis, {
-    dependentAxis: true,
-    tickFormat: function tickFormat(x) {
-      return "".concat(x).concat(tickFormatY);
-    }
-  }), _react.default.createElement(_victory.VictoryStack, {
-    colorScale: colorScheme
-  }, _react.default.createElement(_victory.VictoryBar, {
-    data: readingToDisplay,
-    height: 150,
-    x: "createdAt",
-    y: "value" //   height={100}
-    //   width={100}
-    //   labels={({ datum }) => `y: ${datum.y}`}
-
-  })));
+    }), _react.default.createElement(_victory.VictoryStack, {
+      colorScale: colorScheme
+    }, _react.default.createElement(_victory.VictoryBar, {
+      data: readingToDisplay,
+      height: 150,
+      x: "createdAt",
+      y: "value"
+    })))
+  );
 };
 
 var _default = Graph;
@@ -80662,8 +80666,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Device = function Device(props) {
   var text = props.text,
       id = props.id,
-      proxy = props.proxy;
-  var url = "https://fullstack-challenge-api.herokuapp.com/devices/".concat(id, "/readings");
+      proxy = props.proxy; // uses the passed in id from props to hit the readings endpoint on the API
+
+  var url = "https://fullstack-challenge-api.herokuapp.com/devices/".concat(id, "/readings"); // custom hooks for setting correct data for the graph
 
   var _useState = (0, _react.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -80678,44 +80683,59 @@ var Device = function Device(props) {
   var _useState5 = (0, _react.useState)([]),
       _useState6 = _slicedToArray(_useState5, 2),
       airQuality = _useState6[0],
-      setAirQuality = _useState6[1];
+      setAirQuality = _useState6[1]; // custom hook for pulling the type of graph from the dropdown menu
+  // defaults to humidity since humidity is the first element of the dropdown
+
 
   var _useState7 = (0, _react.useState)('humidity'),
       _useState8 = _slicedToArray(_useState7, 2),
       readingType = _useState8[0],
-      setReadingType = _useState8[1];
+      setReadingType = _useState8[1]; // custom hook for passing props to the graph component
+  // defaults to temperature since all the devices have temperature readings
 
-  var _useState9 = (0, _react.useState)(''),
+
+  var _useState9 = (0, _react.useState)('temperature'),
       _useState10 = _slicedToArray(_useState9, 2),
       yAxisDisplay = _useState10[0],
-      setYAxisDisplay = _useState10[1];
+      setYAxisDisplay = _useState10[1]; // custom hook for passing the payload of data to the graph. format is an array of objects
+
 
   var _useState11 = (0, _react.useState)([]),
       _useState12 = _slicedToArray(_useState11, 2),
       readingToDisplay = _useState12[0],
-      setReadingToDisplay = _useState12[1];
+      setReadingToDisplay = _useState12[1]; // custom hook for closing the graph upon click
+
 
   var _useState13 = (0, _react.useState)(false),
       _useState14 = _slicedToArray(_useState13, 2),
       isGraphHidden = _useState14[0],
-      setIsGraphHidden = _useState14[1];
+      setIsGraphHidden = _useState14[1]; // submission event for setting the payload for the graph component
+
 
   var handleSubmit = function handleSubmit(event) {
-    setYAxisDisplay(readingType);
+    // sets the payload for graphing styling
+    setYAxisDisplay(readingType); // custom hooks for payload. Each is an array composed of objects with created at and value
+
     if (readingType === 'humidity') setReadingToDisplay(humidity);
     if (readingType === 'temperature') setReadingToDisplay(temp);
-    if (readingType === 'airQuality') setReadingToDisplay(airQuality);
-    setIsGraphHidden(false);
+    if (readingType === 'airQuality') setReadingToDisplay(airQuality); // overriding any previous hiding of the graph
+
+    setIsGraphHidden(false); // preventing page rerender
+
     event.preventDefault();
-  };
+  }; // setting the type of graph from the dropdown menu
+
 
   var handleChange = function handleChange(event) {
     setReadingType(event.target.value);
-  };
+  }; // hides the graph upon click
+
 
   var hideGraph = function hideGraph() {
     if (isGraphHidden === false) setIsGraphHidden(true);
-  };
+  }; // similar to the fetch in MainContainer, fetches the device readings in the background
+  // so that when the type of graph the user wants to see is submitted, the fetch is already complete
+
 
   (0, _react.useEffect)(function () {
     fetch(proxy + url, {
@@ -80727,70 +80747,80 @@ var Device = function Device(props) {
     }).then(function (res) {
       return res.json();
     }).then(function (response) {
+      // initializing arrays to set state
       var humidArr = [];
       var tempArr = [];
       var airArr = [];
       response.forEach(function (el) {
-        var obj = {};
+        // since the graph payload type needs to be formatted as an array of objects, initializing object to push to array
+        var obj = {}; // determining which reading to grab from the API
 
         if (el.type === 'humidity') {
+          // grabbing the created at and value props
           obj.createdAt = el.createdAt;
           obj.value = el.value;
           humidArr.push(obj);
         }
 
         if (el.type === 'temperature') {
+          // grabbing the created at and value props
           obj.createdAt = el.createdAt;
           obj.value = el.value;
           tempArr.push(obj);
         }
 
         if (el.type === 'airquality') {
+          // grabbing the created at and value props
           obj.createdAt = el.createdAt;
           obj.value = el.value;
           airArr.push(obj);
         }
-      });
+      }); // setting the custom hooks to be used upon submission
+
       setHumidity(humidArr);
       setTemp(tempArr);
-      setAirQuality(airArr);
+      setAirQuality(airArr); // set the defualt display to be temperature
+
+      setReadingToDisplay(tempArr);
     }).catch(function () {
       throw new Error('error in fetching device readings');
     });
   }, []);
-  return _react.default.createElement("section", {
-    className: "device",
-    id: text.slice(0, 4)
-  }, _react.default.createElement("article", {
-    id: "device-text"
-  }, text), _react.default.createElement("form", {
-    onSubmit: handleSubmit,
-    onChange: handleChange,
-    className: "select-reading"
-  }, _react.default.createElement("section", {
-    id: "select-device-reading"
-  }, "Select Device Reading:", _react.default.createElement("select", {
-    className: "reading-type"
-  }, _react.default.createElement("option", {
-    value: "humidity"
-  }, "Humidity"), _react.default.createElement("option", {
-    value: "temperature"
-  }, "Temperature"), _react.default.createElement("option", {
-    value: "airQuality"
-  }, "Air Quality"))), _react.default.createElement("input", {
-    type: "submit",
-    value: "Submit",
-    className: "button"
-  })), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement("article", null, _react.default.createElement(_Graph.default, {
-    yAxisDisplay: yAxisDisplay,
-    readingToDisplay: readingToDisplay
-  }), _react.default.createElement("button", {
-    type: "submit",
-    onClick: hideGraph,
-    className: "button"
-  }, "Hide Graph")), readingToDisplay.length === 0 && yAxisDisplay !== '' && _react.default.createElement("h1", {
-    id: "empty-data"
-  }, "Sensor Reading Unavailable"));
+  return (// grabbing the first few letters of the name for id
+    _react.default.createElement("section", {
+      className: "device",
+      id: text.slice(0, 4)
+    }, _react.default.createElement("article", {
+      id: "device-text"
+    }, text), _react.default.createElement("form", {
+      onSubmit: handleSubmit,
+      onChange: handleChange,
+      className: "select-reading"
+    }, _react.default.createElement("section", {
+      id: "select-device-reading"
+    }, "Select Device Reading:", _react.default.createElement("select", {
+      className: "reading-type"
+    }, _react.default.createElement("option", {
+      value: "humidity"
+    }, "Humidity"), _react.default.createElement("option", {
+      value: "temperature"
+    }, "Temperature"), _react.default.createElement("option", {
+      value: "airQuality"
+    }, "Air Quality"))), _react.default.createElement("input", {
+      type: "submit",
+      value: "Submit",
+      className: "button"
+    })), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement("article", null, _react.default.createElement(_Graph.default, {
+      yAxisDisplay: yAxisDisplay,
+      readingToDisplay: readingToDisplay
+    }), _react.default.createElement("button", {
+      type: "submit",
+      onClick: hideGraph,
+      className: "button"
+    }, "Hide Graph")), readingToDisplay.length === 0 && yAxisDisplay !== '' && _react.default.createElement("h1", {
+      id: "empty-data"
+    }, "Sensor Reading Unavailable"))
+  );
 };
 
 var _default = Device;
@@ -80825,10 +80855,14 @@ var MainContainer = function MainContainer() {
   var _useState = (0, _react.useState)({}),
       _useState2 = _slicedToArray(_useState, 2),
       devices = _useState2[0],
-      setDevices = _useState2[1];
+      setDevices = _useState2[1]; // proxy to get around cors issues.
 
-  var proxy = 'https://cors-anywhere.herokuapp.com/';
-  var url = 'https://fullstack-challenge-api.herokuapp.com/devices';
+
+  var proxy = 'https://cors-anywhere.herokuapp.com/'; // default query for devices
+
+  var url = 'https://fullstack-challenge-api.herokuapp.com/devices'; // to be sent upon component mount
+  // its only purpose is to get the list of devices from the API
+
   (0, _react.useEffect)(function () {
     fetch(proxy + url, {
       method: 'GET',
@@ -80839,6 +80873,7 @@ var MainContainer = function MainContainer() {
     }).then(function (res) {
       return res.json();
     }).then(function (response) {
+      // creating a device object to pass the name of the device and its id
       var deviceObj = {};
       response.forEach(function (el) {
         deviceObj[el.name] = el.id;
@@ -80847,7 +80882,9 @@ var MainContainer = function MainContainer() {
     }).catch(function () {
       throw new Error('error in fetch request');
     });
-  }, []);
+  }, []); // for in loop to pass an open ended amount of devices to be rendered. 
+  // Passing in their text, id, and the proxy as props
+
   var deviceRender = [];
 
   for (var x in devices) {
@@ -80879,19 +80916,48 @@ var _react = _interopRequireDefault(require("react"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Header = function Header() {
-  return _react.default.createElement("header", null, _react.default.createElement("h2", {
+  return _react.default.createElement("header", {
+    id: "header"
+  }, _react.default.createElement("h1", {
     id: "header-text"
-  }, "Canary Connect Take Home"), _react.default.createElement("a", {
-    href: "https://github.com/dillon-garrett/Canary-Connect-Take-Home"
-  }, _react.default.createElement("img", {
-    src: "assets/github.png",
-    alt: "github logo"
-  })), _react.default.createElement("hr", null));
+  }, "Canary Connect Take Home"));
 };
 
 var _default = Header;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"../src/App.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"../assets/github.png":[function(require,module,exports) {
+module.exports = "/github.8e1cd258.png";
+},{}],"../src/components/Footer.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _github = _interopRequireDefault(require("../../assets/github.png"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Footer = function Footer() {
+  return _react.default.createElement("footer", {
+    id: "footer"
+  }, _react.default.createElement("a", {
+    href: "https://github.com/dillon-garrett/Canary-Connect-Take-Home",
+    rel: "noopener noreferrer",
+    target: "_blank"
+  }, _react.default.createElement("img", {
+    src: _github.default,
+    alt: "github logo",
+    id: "github-logo"
+  })));
+};
+
+var _default = Footer;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","../../assets/github.png":"../assets/github.png"}],"../src/App.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80905,17 +80971,19 @@ var _MainContainer = _interopRequireDefault(require("./containers/MainContainer"
 
 var _Header = _interopRequireDefault(require("./components/Header"));
 
+var _Footer = _interopRequireDefault(require("./components/Footer"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
   return _react.default.createElement("section", {
     id: "app"
-  }, _react.default.createElement(_Header.default, null), _react.default.createElement(_MainContainer.default, null));
+  }, _react.default.createElement(_Header.default, null), _react.default.createElement("hr", null), _react.default.createElement(_MainContainer.default, null), _react.default.createElement(_Footer.default, null));
 };
 
 var _default = App;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./containers/MainContainer":"../src/containers/MainContainer.jsx","./components/Header":"../src/components/Header.jsx"}],"../src/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./containers/MainContainer":"../src/containers/MainContainer.jsx","./components/Header":"../src/components/Header.jsx","./components/Footer":"../src/components/Footer.jsx"}],"../src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -80956,7 +81024,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56913" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53303" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
