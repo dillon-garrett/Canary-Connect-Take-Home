@@ -15,7 +15,7 @@ or
 To run the application in the dev environment type the following in the terminal:
 ```npm run start```
 
-To build the application in production:
+To build the application for production:
 ```npm run build```
 
 To run tests:
@@ -26,7 +26,7 @@ While in developement environment, navigate to ```localhost:1234``` to access th
 
 To interact with the app, simply choose the type of graph you want to display and click __submit__. If you would like to close the graph, you may do so by clicking __hide graph__.
 
-*\*A quick note:* perhaps it is my computer/internet connection, but the API is sometimes quite slow. To prevent this I would have implemented caching, but I would have needed direct access to the origin server. 
+*\*A quick note:* perhaps it is my computer/internet connection, but the API is sometimes quite slow. To prevent this I would have implemented caching, but I would have needed direct access to the origin server. Had I had more time, there are a number of practices I would have implemented or implemented more effectively. I look forward to discussing these.
 
 
 __Author:__ Dillon Garrett
