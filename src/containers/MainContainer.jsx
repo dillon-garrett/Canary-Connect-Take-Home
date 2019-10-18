@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Device from '../components/Device';
+import initialFetch from '../Utils/initialFetch';
 
 const MainContainer = () => {
   const [devices, setDevices] = useState({});
@@ -10,27 +11,12 @@ const MainContainer = () => {
 
   // to be sent upon component mount
   // its only purpose is to get the list of devices from the API
+  // imported function call
   useEffect(() => {
-    fetch(proxy + url, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-      //   mode: 'no-cors'
-    })
-      .then(res => res.json())
-      .then(response => {
-        // creating a device object to pass the name of the device and its id
-        const deviceObj = {};
-        response.forEach(el => {
-          deviceObj[el.name] = el.id;
-        });
-        setDevices(deviceObj);
-      })
-      .catch(() => {
-        throw new Error('error in fetch request');
-      });
+    initialFetch(url, proxy, setDevices);
   }, []);
 
-  // for in loop to pass an open ended amount of devices to be rendered. 
+  // for in loop to pass an open ended amount of devices to be rendered.
   // Passing in their text, id, and the proxy as props
   const deviceRender = [];
   for (const x in devices) {

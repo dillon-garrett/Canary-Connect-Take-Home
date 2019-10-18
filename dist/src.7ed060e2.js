@@ -80587,7 +80587,8 @@ var Graph = function Graph(props) {
     var str = '';
 
     if (readingToDisplay[i].createdAt) {
-      str += readingToDisplay[i].createdAt.slice(6, 10); // commented out below is for formatting time of day
+      str += readingToDisplay[i].createdAt.slice(6, 7) + '.';
+      str += readingToDisplay[i].createdAt.slice(8, 10); // commented out below is for formatting time of day
       //   str += readingToDisplay[i].createdAt.slice(11, 13);
 
       tickFormatX.push(str);
@@ -80637,7 +80638,68 @@ var Graph = function Graph(props) {
 
 var _default = Graph;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","victory":"../node_modules/victory/es/index.js"}],"../src/components/Device.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","victory":"../node_modules/victory/es/index.js"}],"../src/Utils/fetchGraphData.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var fetchGraphData = function fetchGraphData(proxy, url, setHumidity, setTemp, setAirQuality, setReadingToDisplay) {
+  console.log('in here');
+  fetch(proxy + url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    } //   mode: 'no-cors'
+
+  }).then(function (res) {
+    return res.json();
+  }).then(function (response) {
+    // initializing arrays to set state
+    var humidArr = [];
+    var tempArr = [];
+    var airArr = [];
+    response.forEach(function (el) {
+      // since the graph payload type needs to be formatted as an array of objects, initializing object to push to array
+      var obj = {}; // determining which reading to grab from the API
+
+      if (el.type === 'humidity') {
+        // grabbing the created at and value props
+        obj.createdAt = el.createdAt;
+        obj.value = el.value;
+        humidArr.push(obj);
+      }
+
+      if (el.type === 'temperature') {
+        // grabbing the created at and value props
+        obj.createdAt = el.createdAt;
+        obj.value = el.value;
+        tempArr.push(obj);
+      }
+
+      if (el.type === 'airquality') {
+        // grabbing the created at and value props
+        obj.createdAt = el.createdAt;
+        obj.value = el.value;
+        airArr.push(obj);
+      }
+    }); // setting the custom hooks to be used upon submission
+
+    setHumidity(humidArr);
+    setTemp(tempArr);
+    setAirQuality(airArr); // set the defualt display to be temperature
+
+    setReadingToDisplay(tempArr);
+  }).catch(function () {
+    throw new Error('error in fetching device readings');
+  });
+};
+
+var _default = fetchGraphData;
+exports.default = _default;
+},{}],"../src/components/Device.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80648,6 +80710,8 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 
 var _Graph = _interopRequireDefault(require("./Graph"));
+
+var _fetchGraphData = _interopRequireDefault(require("../Utils/fetchGraphData"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -80738,53 +80802,7 @@ var Device = function Device(props) {
 
 
   (0, _react.useEffect)(function () {
-    fetch(proxy + url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      } //   mode: 'no-cors'
-
-    }).then(function (res) {
-      return res.json();
-    }).then(function (response) {
-      // initializing arrays to set state
-      var humidArr = [];
-      var tempArr = [];
-      var airArr = [];
-      response.forEach(function (el) {
-        // since the graph payload type needs to be formatted as an array of objects, initializing object to push to array
-        var obj = {}; // determining which reading to grab from the API
-
-        if (el.type === 'humidity') {
-          // grabbing the created at and value props
-          obj.createdAt = el.createdAt;
-          obj.value = el.value;
-          humidArr.push(obj);
-        }
-
-        if (el.type === 'temperature') {
-          // grabbing the created at and value props
-          obj.createdAt = el.createdAt;
-          obj.value = el.value;
-          tempArr.push(obj);
-        }
-
-        if (el.type === 'airquality') {
-          // grabbing the created at and value props
-          obj.createdAt = el.createdAt;
-          obj.value = el.value;
-          airArr.push(obj);
-        }
-      }); // setting the custom hooks to be used upon submission
-
-      setHumidity(humidArr);
-      setTemp(tempArr);
-      setAirQuality(airArr); // set the defualt display to be temperature
-
-      setReadingToDisplay(tempArr);
-    }).catch(function () {
-      throw new Error('error in fetching device readings');
-    });
+    (0, _fetchGraphData.default)(proxy, url, setHumidity, setTemp, setAirQuality, setReadingToDisplay);
   }, []);
   return (// grabbing the first few letters of the name for id
     _react.default.createElement("section", {
@@ -80825,7 +80843,38 @@ var Device = function Device(props) {
 
 var _default = Device;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./Graph":"../src/components/Graph.jsx"}],"../src/containers/MainContainer.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./Graph":"../src/components/Graph.jsx","../Utils/fetchGraphData":"../src/Utils/fetchGraphData.js"}],"../src/Utils/initialFetch.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var initialFetch = function initialFetch(url, proxy, setDevices) {
+  fetch(proxy + url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    } //   mode: 'no-cors'
+
+  }).then(function (res) {
+    return res.json();
+  }).then(function (response) {
+    // creating a device object to pass the name of the device and its id
+    var deviceObj = {};
+    response.forEach(function (el) {
+      deviceObj[el.name] = el.id;
+    });
+    setDevices(deviceObj);
+  }).catch(function () {
+    throw new Error('error in fetch request');
+  });
+};
+
+var _default = initialFetch;
+exports.default = _default;
+},{}],"../src/containers/MainContainer.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80836,6 +80885,8 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 
 var _Device = _interopRequireDefault(require("../components/Device"));
+
+var _initialFetch = _interopRequireDefault(require("../Utils/initialFetch"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -80862,27 +80913,11 @@ var MainContainer = function MainContainer() {
 
   var url = 'https://fullstack-challenge-api.herokuapp.com/devices'; // to be sent upon component mount
   // its only purpose is to get the list of devices from the API
+  // imported function call
 
   (0, _react.useEffect)(function () {
-    fetch(proxy + url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      } //   mode: 'no-cors'
-
-    }).then(function (res) {
-      return res.json();
-    }).then(function (response) {
-      // creating a device object to pass the name of the device and its id
-      var deviceObj = {};
-      response.forEach(function (el) {
-        deviceObj[el.name] = el.id;
-      });
-      setDevices(deviceObj);
-    }).catch(function () {
-      throw new Error('error in fetch request');
-    });
-  }, []); // for in loop to pass an open ended amount of devices to be rendered. 
+    (0, _initialFetch.default)(url, proxy, setDevices);
+  }, []); // for in loop to pass an open ended amount of devices to be rendered.
   // Passing in their text, id, and the proxy as props
 
   var deviceRender = [];
@@ -80903,7 +80938,7 @@ var MainContainer = function MainContainer() {
 
 var _default = MainContainer;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../components/Device":"../src/components/Device.jsx"}],"../src/components/Header.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../components/Device":"../src/components/Device.jsx","../Utils/initialFetch":"../src/Utils/initialFetch.js"}],"../src/components/Header.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81024,7 +81059,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53303" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60842" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -47,7 +47,8 @@ const Graph = props => {
     tickValues.push(i + 1);
     let str = '';
     if (readingToDisplay[i].createdAt) {
-      str += readingToDisplay[i].createdAt.slice(6, 10);
+      str += readingToDisplay[i].createdAt.slice(6, 7) + '.';
+      str += readingToDisplay[i].createdAt.slice(8, 10);
       // commented out below is for formatting time of day
       //   str += readingToDisplay[i].createdAt.slice(11, 13);
       tickFormatX.push(str);
