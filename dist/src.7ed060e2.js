@@ -80761,13 +80761,17 @@ var Device = function Device(props) {
   return _react.default.createElement("section", {
     className: "device",
     id: text.slice(0, 4)
-  }, _react.default.createElement("div", {
+  }, _react.default.createElement("article", {
     id: "device-text"
   }, text), _react.default.createElement("form", {
     onSubmit: handleSubmit,
     onChange: handleChange,
     className: "select-reading"
-  }, _react.default.createElement("div", null, "Select Device Reading:", _react.default.createElement("select", null, _react.default.createElement("option", {
+  }, _react.default.createElement("section", {
+    id: "select-device-reading"
+  }, "Select Device Reading:", _react.default.createElement("select", {
+    className: "reading-type"
+  }, _react.default.createElement("option", {
     value: "humidity"
   }, "Humidity"), _react.default.createElement("option", {
     value: "temperature"
@@ -80775,18 +80779,18 @@ var Device = function Device(props) {
     value: "airQuality"
   }, "Air Quality"))), _react.default.createElement("input", {
     type: "submit",
-    value: "submit",
+    value: "Submit",
     className: "button"
-  })), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement(_Graph.default, {
+  })), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement("article", null, _react.default.createElement(_Graph.default, {
     yAxisDisplay: yAxisDisplay,
     readingToDisplay: readingToDisplay
-  }), readingToDisplay.length === 0 && yAxisDisplay !== '' && _react.default.createElement("h1", {
-    id: "empty-data"
-  }, "Sensor Reading Unavailable"), _react.default.createElement("button", {
+  }), _react.default.createElement("button", {
     type: "submit",
     onClick: hideGraph,
     className: "button"
-  }, "Hide Graph"));
+  }, "Hide Graph")), readingToDisplay.length === 0 && yAxisDisplay !== '' && _react.default.createElement("h1", {
+    id: "empty-data"
+  }, "Sensor Reading Unavailable"));
 };
 
 var _default = Device;
@@ -80855,14 +80859,39 @@ var MainContainer = function MainContainer() {
     }));
   }
 
-  return _react.default.createElement("div", {
+  return _react.default.createElement("article", {
     id: "main-container"
   }, deviceRender);
 };
 
 var _default = MainContainer;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../components/Device":"../src/components/Device.jsx"}],"../src/App.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../components/Device":"../src/components/Device.jsx"}],"../src/components/Header.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Header = function Header() {
+  return _react.default.createElement("header", null, _react.default.createElement("h2", {
+    id: "header-text"
+  }, "Canary Connect Take Home"), _react.default.createElement("a", {
+    href: "https://github.com/dillon-garrett/Canary-Connect-Take-Home"
+  }, _react.default.createElement("img", {
+    src: "assets/github.png",
+    alt: "github logo"
+  })), _react.default.createElement("hr", null));
+};
+
+var _default = Header;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"../src/App.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80874,17 +80903,19 @@ var _react = _interopRequireDefault(require("react"));
 
 var _MainContainer = _interopRequireDefault(require("./containers/MainContainer"));
 
+var _Header = _interopRequireDefault(require("./components/Header"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
-  return _react.default.createElement("main", {
+  return _react.default.createElement("section", {
     id: "app"
-  }, _react.default.createElement(_MainContainer.default, null));
+  }, _react.default.createElement(_Header.default, null), _react.default.createElement(_MainContainer.default, null));
 };
 
 var _default = App;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./containers/MainContainer":"../src/containers/MainContainer.jsx"}],"../src/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./containers/MainContainer":"../src/containers/MainContainer.jsx","./components/Header":"../src/components/Header.jsx"}],"../src/index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -80925,7 +80956,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54861" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56913" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

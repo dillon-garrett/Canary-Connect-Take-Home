@@ -1,11 +1,13 @@
 import React from 'react';
 import MainContainer from './containers/MainContainer';
+import Header from './components/Header';
 
 const App = () => {
   return (
-    <main id="app">
+    <section id="app">
+      <Header />
       <MainContainer />
-    </main>
+    </section>
   );
 };
 

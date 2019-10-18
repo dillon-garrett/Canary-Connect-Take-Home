@@ -69,27 +69,29 @@ const Device = props => {
 
   return (
     <section className="device" id={text.slice(0, 4)}>
-      <div id="device-text">{text}</div>
+      <article id="device-text">{text}</article>
       <form onSubmit={handleSubmit} onChange={handleChange} className="select-reading">
-        <div>
+        <section id="select-device-reading">
           Select Device Reading:
-          <select>
+          <select className="reading-type">
             <option value="humidity">Humidity</option>
             <option value="temperature">Temperature</option>
             <option value="airQuality">Air Quality</option>
           </select>
-        </div>
-        <input type="submit" value="submit" className="button" />
+        </section>
+        <input type="submit" value="Submit" className="button" />
       </form>
       {readingToDisplay.length > 0 && isGraphHidden === false && (
-        <Graph yAxisDisplay={yAxisDisplay} readingToDisplay={readingToDisplay} />
+        <article>
+          <Graph yAxisDisplay={yAxisDisplay} readingToDisplay={readingToDisplay} />
+          <button type="submit" onClick={hideGraph} className="button">
+            Hide Graph
+          </button>
+        </article>
       )}
       {readingToDisplay.length === 0 && yAxisDisplay !== '' && (
         <h1 id="empty-data">Sensor Reading Unavailable</h1>
       )}
-      <button type="submit" onClick={hideGraph} className="button">
-        Hide Graph
-      </button>
     </section>
   );
 };

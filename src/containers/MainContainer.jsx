@@ -29,7 +29,7 @@ const MainContainer = () => {
   for (const x in devices) {
     deviceRender.push(<Device text={x} id={devices[x]} key={devices[x]} proxy={proxy} />);
   }
-  return <div id="main-container">{deviceRender}</div>;
+  return <article id="main-container">{deviceRender}</article>;
 };
 
 export default MainContainer;
