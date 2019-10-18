@@ -10,7 +10,9 @@ const SelectDeviceReading = props => {
           Select Device Reading:
           <select className="reading-type">
             <option value="humidity">Humidity</option>
-            <option value="temperature">Temperature</option>
+            <option value="temperature" selected>
+              Temperature
+            </option>
             <option value="airQuality">Air Quality</option>
           </select>
         </section>

@@ -80726,7 +80726,8 @@ var SelectDeviceReading = function SelectDeviceReading(props) {
   }, _react.default.createElement("option", {
     value: "humidity"
   }, "Humidity"), _react.default.createElement("option", {
-    value: "temperature"
+    value: "temperature",
+    selected: true
   }, "Temperature"), _react.default.createElement("option", {
     value: "airQuality"
   }, "Air Quality"))), _react.default.createElement("input", {
@@ -80792,7 +80793,7 @@ var Device = function Device(props) {
   // defaults to humidity since humidity is the first element of the dropdown
 
 
-  var _useState7 = (0, _react.useState)('humidity'),
+  var _useState7 = (0, _react.useState)('temperature'),
       _useState8 = _slicedToArray(_useState7, 2),
       readingType = _useState8[0],
       setReadingType = _useState8[1]; // custom hook for passing props to the graph component
@@ -81085,7 +81086,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62490" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50007" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -13,7 +13,7 @@ const Device = props => {
   const [airQuality, setAirQuality] = useState([]);
   // custom hook for pulling the type of graph from the dropdown menu
   // defaults to humidity since humidity is the first element of the dropdown
-  const [readingType, setReadingType] = useState('humidity');
+  const [readingType, setReadingType] = useState('temperature');
   // custom hook for passing props to the graph component
   // defaults to temperature since all the devices have temperature readings
   const [yAxisDisplay, setYAxisDisplay] = useState('temperature');
