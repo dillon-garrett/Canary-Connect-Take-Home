@@ -15,14 +15,14 @@ or
 To run the application in the dev environment type the following in the terminal:
 ```npm run start```
 
-To run the application in production:
+To build the application in production:
 ```npm run build```
 
 To run tests:
 ```npm run test```
 
 ## Using the Application
-Navigate to ```localhost:1234``` to access the application.
+While in developement environment, navigate to ```localhost:1234``` to access the application.
 
 To interact with the app, simply choose the type of graph you want to display and click __submit__. If you would like to close the graph, you may do so by clicking __hide graph__.
 
