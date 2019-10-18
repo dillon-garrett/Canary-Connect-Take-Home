@@ -1,5 +1,4 @@
 const fetchGraphData = (proxy, url, setHumidity, setTemp, setAirQuality, setReadingToDisplay) => {
-  console.log('in here');
   fetch(proxy + url, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }

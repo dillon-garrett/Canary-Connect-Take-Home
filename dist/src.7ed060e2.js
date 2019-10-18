@@ -80647,7 +80647,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var fetchGraphData = function fetchGraphData(proxy, url, setHumidity, setTemp, setAirQuality, setReadingToDisplay) {
-  console.log('in here');
   fetch(proxy + url, {
     method: 'GET',
     headers: {
@@ -80699,7 +80698,47 @@ var fetchGraphData = function fetchGraphData(proxy, url, setHumidity, setTemp, s
 
 var _default = fetchGraphData;
 exports.default = _default;
-},{}],"../src/components/Device.jsx":[function(require,module,exports) {
+},{}],"../src/components/SelectDeviceReading.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SelectDeviceReading = function SelectDeviceReading(props) {
+  var handleSubmit = props.handleSubmit,
+      handleChange = props.handleChange;
+  return _react.default.createElement("section", {
+    id: "select-reading-component"
+  }, _react.default.createElement("form", {
+    onSubmit: handleSubmit,
+    onChange: handleChange,
+    className: "select-reading"
+  }, _react.default.createElement("section", {
+    id: "select-device-reading"
+  }, "Select Device Reading:", _react.default.createElement("select", {
+    className: "reading-type"
+  }, _react.default.createElement("option", {
+    value: "humidity"
+  }, "Humidity"), _react.default.createElement("option", {
+    value: "temperature"
+  }, "Temperature"), _react.default.createElement("option", {
+    value: "airQuality"
+  }, "Air Quality"))), _react.default.createElement("input", {
+    type: "submit",
+    value: "Submit",
+    className: "button"
+  })));
+};
+
+var _default = SelectDeviceReading;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"../src/components/Device.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -80712,6 +80751,8 @@ var _react = _interopRequireWildcard(require("react"));
 var _Graph = _interopRequireDefault(require("./Graph"));
 
 var _fetchGraphData = _interopRequireDefault(require("../Utils/fetchGraphData"));
+
+var _SelectDeviceReading = _interopRequireDefault(require("./SelectDeviceReading"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -80810,25 +80851,10 @@ var Device = function Device(props) {
       id: text.slice(0, 4)
     }, _react.default.createElement("article", {
       id: "device-text"
-    }, text), _react.default.createElement("form", {
-      onSubmit: handleSubmit,
-      onChange: handleChange,
-      className: "select-reading"
-    }, _react.default.createElement("section", {
-      id: "select-device-reading"
-    }, "Select Device Reading:", _react.default.createElement("select", {
-      className: "reading-type"
-    }, _react.default.createElement("option", {
-      value: "humidity"
-    }, "Humidity"), _react.default.createElement("option", {
-      value: "temperature"
-    }, "Temperature"), _react.default.createElement("option", {
-      value: "airQuality"
-    }, "Air Quality"))), _react.default.createElement("input", {
-      type: "submit",
-      value: "Submit",
-      className: "button"
-    })), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement("article", null, _react.default.createElement(_Graph.default, {
+    }, text), _react.default.createElement(_SelectDeviceReading.default, {
+      handleChange: handleChange,
+      handleSubmit: handleSubmit
+    }), readingToDisplay.length > 0 && isGraphHidden === false && _react.default.createElement("article", null, _react.default.createElement(_Graph.default, {
       yAxisDisplay: yAxisDisplay,
       readingToDisplay: readingToDisplay
     }), _react.default.createElement("button", {
@@ -80843,7 +80869,7 @@ var Device = function Device(props) {
 
 var _default = Device;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./Graph":"../src/components/Graph.jsx","../Utils/fetchGraphData":"../src/Utils/fetchGraphData.js"}],"../src/Utils/initialFetch.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./Graph":"../src/components/Graph.jsx","../Utils/fetchGraphData":"../src/Utils/fetchGraphData.js","./SelectDeviceReading":"../src/components/SelectDeviceReading.jsx"}],"../src/Utils/initialFetch.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81059,7 +81085,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60842" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62490" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

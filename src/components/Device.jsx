@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Graph from './Graph';
 import fetchGraphData from '../Utils/fetchGraphData';
+import SelectDeviceReading from './SelectDeviceReading';
 
 const Device = props => {
   const { text, id, proxy } = props;
@@ -57,17 +58,7 @@ const Device = props => {
       {/* rendering of the text for each device */}
       <article id="device-text">{text}</article>
       {/* dropdown menu and functions for handling user input */}
-      <form onSubmit={handleSubmit} onChange={handleChange} className="select-reading">
-        <section id="select-device-reading">
-          Select Device Reading:
-          <select className="reading-type">
-            <option value="humidity">Humidity</option>
-            <option value="temperature">Temperature</option>
-            <option value="airQuality">Air Quality</option>
-          </select>
-        </section>
-        <input type="submit" value="Submit" className="button" />
-      </form>
+      <SelectDeviceReading handleChange={handleChange} handleSubmit={handleSubmit} />
       {/* conditional render to prevent graph from rendering until user input or if user chooses to hide graph */}
       {readingToDisplay.length > 0 && isGraphHidden === false && (
         <article>

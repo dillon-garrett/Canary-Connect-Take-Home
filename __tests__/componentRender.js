@@ -36,7 +36,7 @@ describe('React Component Tests', () => {
     expect(tSpan.textContent).toBe('Humidity Ratings in 2018');
   });
 
-  
+
 //   it('renders user data', async () => {
 //     const fakeData = [
 //       {
